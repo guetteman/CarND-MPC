@@ -110,7 +110,7 @@ int main() {
           Eigen::Map<Eigen::VectorXd> ptsx_transform(ptrx, n_waypoints);
 
           double* ptry = &ptsy[0];
-          Eigen::Map<Eigen::VectorXd> ptsx_transform(ptry, n_waypoints);
+          Eigen::Map<Eigen::VectorXd> ptsy_transform(ptry, n_waypoints);
 
           // Fit polynomial to the points - 3rd order.
           auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
@@ -140,9 +140,9 @@ int main() {
           double poly_inc = 2.5;
           int num_points = 25;
 
-          for (int = 1; i < num_points; i++) {
+          for (int i = 1; i < num_points; i++) {
             next_x_vals.push_back(poly_inc*i);
-            next_y_vals.push_back(polyeval(coeffs, poly_ing*i));
+            next_y_vals.push_back(polyeval(coeffs, poly_inc*i));
           }
 
           vector<double> mpc_x_vals;
@@ -192,19 +192,11 @@ int main() {
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = throttle_value;
 
-          //Display the MPC predicted trajectory 
-          vector<double> mpc_x_vals;
-          vector<double> mpc_y_vals;
-
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
 
           msgJson["mpc_x"] = mpc_x_vals;
           msgJson["mpc_y"] = mpc_y_vals;
-
-          //Display the waypoints/reference line
-          vector<double> next_x_vals;
-          vector<double> next_y_vals;
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
