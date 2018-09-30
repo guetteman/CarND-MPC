@@ -1,0 +1,10 @@
+prefix=/usr/local
+libdir=/Users/guetteluis/Projects/udacity/self-driving-cars/term2/CarND-MPC/Ipopt-3.12.11/ThirdParty/Mumps
+
+Name: Mumps
+Description: Multifrontal Massively Parallel sparse direct Solver
+URL: https://projects.coin-or.org/BuildTools
+Version: 1.6.0
+Libs: ${libdir}/libcoinmumps.la /usr/local/lib/libcoinblas.a -lgfortran  -L/usr/local/Cellar/gcc/8.2.0/lib/gcc/8/gcc/x86_64-apple-darwin18.0.0/8.2.0 -L/usr/local/Cellar/gcc/8.2.0/lib/gcc/8/gcc/x86_64-apple-darwin18.0.0/8.2.0/../../.. -lgfortran -lSystem -lquadmath -lm  -L/usr/local/Cellar/gcc/8.2.0/lib/gcc/8/gcc/x86_64-apple-darwin18.0.0/8.2.0 -L/usr/local/Cellar/gcc/8.2.0/lib/gcc/8/gcc/x86_64-apple-darwin18.0.0/8.2.0/../../.. -lgfortran -lSystem -lquadmath -lm  -L/usr/local/Cellar/gcc/8.2.0/lib/gcc/8/gcc/x86_64-apple-darwin18.0.0/8.2.0 -L/usr/local/Cellar/gcc/8.2.0/lib/gcc/8/gcc/x86_64-apple-darwin18.0.0/8.2.0/../../.. -lgfortran -lSystem -lquadmath -lm
+Cflags: -I/Users/guetteluis/Projects/udacity/self-driving-cars/term2/CarND-MPC/Ipopt-3.12.11/ThirdParty/Mumps/MUMPS/libseq -I/Users/guetteluis/Projects/udacity/self-driving-cars/term2/CarND-MPC/Ipopt-3.12.11/ThirdParty/Mumps/MUMPS/include -DCOIN_USE_MUMPS_MPI_H
+Requires: 

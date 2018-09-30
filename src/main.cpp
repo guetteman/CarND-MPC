@@ -98,8 +98,93 @@ int main() {
           * Both are in between [-1, 1].
           *
           */
-          double steer_value;
-          double throttle_value;
+          size_t n_waypoints = ptsx.size();
+          for (unsigned int i = 0; i < n_waypoints; i++ ) {
+            double shift_x = ptsx[i] - px;
+            double shift_y = ptsy[i] - py;
+            ptsx[i] = shift_x * cos( 0.0 - psi ) - shift_y * sin( 0.0 - psi );
+            ptsy[i] = shift_x * sin( 0.0 - psi ) + shift_y * cos( 0.0 - psi );
+          }
+
+          double* ptrx = &ptsx[0];
+          Eigen::Map<Eigen::VectorXd> ptsx_transform(ptrx, n_waypoints);
+
+          double* ptry = &ptsy[0];
+          Eigen::Map<Eigen::VectorXd> ptsx_transform(ptry, n_waypoints);
+
+          // Fit polynomial to the points - 3rd order.
+          auto coeffs = polyfit(ptsx_transform, ptsy_transform, 3);
+
+          // Actuator delay in milliseconds.
+          const int actuatorDelay =  100;
+
+          // Actuator delay in seconds.
+          const double delay = actuatorDelay / 1000.0;
+
+          double cte = polyeval(coeffs, 0);
+
+          double epsi = -atan(coeffs[1]);
+
+          double steer_value = j[1]["steering_angle"];
+          double throttle_value = j[1]["throttle"];
+
+          Eigen::VectorXd state(6);
+          state << 0, 0, 0, v, cte, epsi;
+
+
+          auto vars = mpc.Solve(state, coeffs);
+
+          vector<double> next_x_vals;
+          vector<double> next_y_vals;
+
+          double poly_inc = 2.5;
+          int num_points = 25;
+
+          for (int = 1; i < num_points; i++) {
+            next_x_vals.push_back(poly_inc*i);
+            next_y_vals.push_back(polyeval(coeffs, poly_ing*i));
+          }
+
+          vector<double> mpc_x_vals;
+          vector<double> mpc_y_vals;
+
+          for (int i = 2; i < vars.size(); i++) {
+            if (i%2 == 0) {
+              mpc_x_vals.push_back(vars[i]);
+            } else {
+              mpc_y_vals.push_back(vars[i]);
+            }
+          }
+
+          double Lf = 2.67;
+ 
+          // // Initial state.
+          // const double x0 = 0;
+          // const double y0 = 0;
+          // const double psi0 = 0;
+          // const double cte0 = coeffs[0];
+          // const double epsi0 = -atan(coeffs[1]);
+
+          // // State after delay.
+          // double x_delay = x0 + ( v * cos(psi0) * delay );
+          // double y_delay = y0 + ( v * sin(psi0) * delay );
+          // double psi_delay = psi0 - ( v * delta * delay / mpc.Lf );
+          // double v_delay = v + a * delay;
+          // double cte_delay = cte0 + ( v * sin(epsi0) * delay );
+          // double epsi_delay = epsi0 - ( v * atan(coeffs[1]) * delay / mpc.Lf );
+
+          // // Define the state vector.
+          // Eigen::VectorXd state(6);
+          // state << x_delay, y_delay, psi_delay, v_delay, cte_delay, epsi_delay;
+
+          // // Find the MPC solution.
+          // auto vars = mpc.Solve(state, coeffs);
+
+          // double steer_value = vars[0]/deg2rad(25);
+          // double throttle_value = vars[1];
+
+          steer_value = vars[0]/(deg2rad(25)*Lf);
+          throttle_value = vars[1]; 
 
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
