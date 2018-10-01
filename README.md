@@ -123,7 +123,7 @@ for (int t = 0; t < N - 2; t++) {
 
 ## Timestep Length and Elapsed Duration (N & dt)
 
-`N` is the number of timesteps in the horizon. `dt` is how much time elapses between actuations. `N`, `dt` are hyperparameters we will need to tune for each model predictive controller. As we work with finite resources, if we set `N` to a large value, we will have performance issue, the same happens with a really small `dt`. After trying with several values, I decided to set `N = 10` and  `dt = 0.1` which give a better result.
+`N` is the number of timesteps in the horizon. `dt` is how much time elapses between actuations. `N`, `dt` are hyperparameters we will need to tune for each model predictive controller. As we work with finite resources, if we set `N` to a large value, we will have performance issue, the same happens with a really small `dt`. I decided to set `N = 10` and  `dt = 0.1`.
 
 ## Polynomial Fitting and MPC Preprocessing
 
@@ -179,3 +179,5 @@ double epsi_delay = epsi0 - ( v * atan(coeffs[1]) * delay / Lf );
 Eigen::VectorXd state(6);
 state << x_delay, y_delay, psi_delay, v_delay, cte_delay, epsi_delay;
 ```
+
+I'm currently having a lot of issues to test with simulator in mac
